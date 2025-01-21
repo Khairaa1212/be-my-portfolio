@@ -1,39 +1,50 @@
 import { PrismaService } from '../prisma/prisma.service';
-import { Portfolio, Project } from '@prisma/client';
+import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 export declare class PortfolioService {
     private prisma;
     constructor(prisma: PrismaService);
-    getAll(): Promise<{
-        firstName: string;
-        lastName: string;
-        avatar: string;
-        projectName: string;
-        institutionName: string;
-    }[]>;
     getPortfolioById(id: number): Promise<{
+        id: number;
         firstName: string;
         lastName: string;
         avatar: string;
-        projectName: string;
-        institutionName: string;
+        projects: {
+            id: number;
+            projectName: string;
+            institutionName: string;
+        }[];
     }>;
-    createPortfolio(data: {
+    createPortfolio(data: CreatePortfolioDto): Promise<{
+        projects: {
+            id: number;
+            projectName: string;
+            institutionName: string;
+            userId: number;
+        }[];
+    } & {
+        firstName: string;
+        lastName: string;
+        avatar: string;
+        id: number;
         username: string;
         password: string;
+        hobby: string;
+    }>;
+    updatePortfolio(id: number, data: {
+        firstName?: string;
+        lastName?: string;
+        avatar?: string;
+        project_name?: string;
+        institution_name?: string;
+    }): Promise<{
+        id: number;
         firstName: string;
         lastName: string;
         avatar: string;
-        hobby: string;
-    }): Promise<Portfolio>;
-    createProject(data: {
-        projectName: string;
-        institutionName: string;
-        userId: number;
-    }): Promise<Project>;
-    updatePortfolioById(id: number, data: {
-        firstName: string;
-        lastName: string;
-        avatar: string;
-        hobby: string;
-    }): Promise<Portfolio>;
+        projects: {
+            id: number;
+            projectName: string;
+            institutionName: string;
+        }[];
+    }>;
 }

@@ -3,78 +3,57 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 async function main() {
-    const portfolio1 = await prisma.portfolio.create({
-        data: {
-            username: 'Kai',
-            password: 'project1',
-            firstName: 'Khaira',
-            lastName: 'Agustina',
-            avatar: '',
-            hobby: 'Coodingg',
-            projects: {
-                create: [
-                    {
-                        projectName: 'Project PKL',
-                        institutionName: 'SMKN 1 BALIKPAPAN',
-                    },
-                    {
-                        projectName: 'Database Project',
-                        institutionName: 'Universitas Mulia',
-                    },
-                ],
+    await prisma.portfolio.createMany({
+        data: [
+            {
+                username: "Khairra",
+                password: "myprojectum",
+                firstName: "Asmarani",
+                lastName: "Khaira",
+                avatar: "",
+                hobby: "Coding"
             },
-        },
-    });
-    const portfolio2 = await prisma.portfolio.create({
-        data: {
-            username: 'Khai_ra',
-            password: 'muyprojectum',
-            firstName: 'Asmarani',
-            lastName: 'Khaira',
-            avatar: '',
-            hobby: 'Cooking',
-            projects: {
-                create: [
-                    {
-                        projectName: 'Project History',
-                        institutionName: 'Universitas Mulia',
-                    },
-                    {
-                        projectName: 'Project Universitas Mulia',
-                        institutionName: 'Universitas Mulia (UM)',
-                    },
-                ],
+            {
+                username: "Kai",
+                password: "password22",
+                firstName: "Khaira",
+                lastName: "Agustina",
+                avatar: "",
+                hobby: "Cooking"
             },
-        },
+            {
+                username: "Tya",
+                password: "my password",
+                firstName: "Rastya",
+                lastName: "Dachniarti",
+                avatar: "",
+                hobby: "Cooking, Traveling"
+            }
+        ]
     });
-    const portfolio3 = await prisma.portfolio.create({
-        data: {
-            username: 'Tya',
-            password: '123456',
-            firstName: 'Rastya',
-            lastName: 'Dachniarti',
-            avatar: '',
-            hobby: 'Cooking, Traveling',
-            projects: {
-                create: [
-                    {
-                        projectName: 'About Me',
-                        institutionName: 'Universitas Mulia',
-                    },
-                    {
-                        projectName: 'Project Universitas Mulia',
-                        institutionName: 'Universitas Mulia (UM)',
-                    },
-                ],
+    await prisma.project.createMany({
+        data: [
+            {
+                projectName: "Project History",
+                institutionName: "Universitas Mulia",
+                userId: 1,
             },
-        },
+            {
+                projectName: "Project Universitas Mulia",
+                institutionName: "SMKN 1 BALIKPAPAN",
+                userId: 2,
+            },
+            {
+                projectName: "About Me",
+                institutionName: "Universitas Mulia",
+                userId: 3,
+            }
+        ]
     });
-    console.log('Added portfolios:', portfolio1, portfolio2, portfolio3);
 }
 main()
-    .catch(e => {
-    console.error(e);
-    process.exit(1);
+    .catch((e) => {
+    throw e;
 })
     .finally(async () => {
     await prisma.$disconnect();

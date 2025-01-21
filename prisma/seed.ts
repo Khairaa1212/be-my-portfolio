@@ -1,85 +1,65 @@
+// prisma/seed.ts
+
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  // Menambahkan data ke tabel portfolio dengan proyek terkait
-  const portfolio1 = await prisma.portfolio.create({
-    data: {
-      username: 'Kai',
-      password: 'project1',
-      firstName: 'Khaira',
-      lastName: 'Agustina',
-      avatar: '',
-      hobby: 'Coodingg',
-      projects: {
-        create: [
-          {
-            projectName: 'Project PKL',
-            institutionName: 'SMKN 1 BALIKPAPAN',
-          },
-          {
-            projectName: 'Database Project',
-            institutionName: 'Universitas Mulia',
-          },
-        ],
-      },
-    },
+    // Membuat Data User
+  await prisma.portfolio.createMany({
+    data: [
+        {
+            username: "Khairra",
+            password: "myprojectum",
+            firstName: "Asmarani",
+            lastName: "Khaira",
+            avatar: "",
+            hobby: "Coding"
+        },
+        {
+            username: "Kai",
+            password: "password22",
+            firstName: "Khaira",
+            lastName: "Agustina",
+            avatar: "",
+            hobby: "Cooking"
+        },
+        {
+          username: "Tya",
+          password: "my password",
+          firstName: "Rastya",
+          lastName: "Dachniarti",
+          avatar: "",
+          hobby: "Cooking, Traveling"
+      }
+    ]
   });
 
-  const portfolio2 = await prisma.portfolio.create({
-    data: {
-      username: 'Khai_ra',
-      password: 'muyprojectum',
-      firstName: 'Asmarani',
-      lastName: 'Khaira',
-      avatar: '',
-      hobby: 'Cooking',
-      projects: {
-        create: [
-          {
-            projectName: 'Project History',
-            institutionName: 'Universitas Mulia',
-          },
-          {
-            projectName: 'Project Universitas Mulia',
-            institutionName: 'Universitas Mulia (UM)',
-          },
-        ],
-      },
-    },
-  });
-
-  const portfolio3 = await prisma.portfolio.create({
-    data: {
-      username: 'Tya',
-      password: '123456',
-      firstName: 'Rastya',
-      lastName: 'Dachniarti',
-      avatar: '',
-      hobby: 'Cooking, Traveling',
-      projects: {
-        create: [
-          {
-            projectName: 'About Me',
-            institutionName: 'Universitas Mulia',
-          },
-          {
-            projectName: 'Project Universitas Mulia',
-            institutionName: 'Universitas Mulia (UM)',
-          },
-        ],
-      },
-    },
-  });
-
-  console.log('Added portfolios:', portfolio1, portfolio2, portfolio3);
+  // Membuat Data Project
+  await prisma.project.createMany({
+      data: [
+        {
+          projectName: "Project History",
+          institutionName: "Universitas Mulia",
+          userId: 1,
+        },
+        {
+          projectName: "Project Universitas Mulia",
+          institutionName: "SMKN 1 BALIKPAPAN",
+          userId: 2,
+        },
+        {
+          projectName: "About Me",
+          institutionName: "Universitas Mulia",
+          userId: 3,
+        }
+      ]
+    });
 }
 
 main()
-  .catch(e => {
-    console.error(e);
-    process.exit(1);
+  .catch((e) => {
+    throw e;
   })
   .finally(async () => {
     await prisma.$disconnect();

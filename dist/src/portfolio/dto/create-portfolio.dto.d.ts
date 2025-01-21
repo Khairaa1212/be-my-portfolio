@@ -1,8 +1,7 @@
 export declare class CreatePortfolioDto {
-    username: string;
-    password: string;
     firstName: string;
     lastName: string;
-    avatar: string;
-    hobby: string;
+    avatar?: string;
+    project_name: string;
+    institution_name: string;
 }

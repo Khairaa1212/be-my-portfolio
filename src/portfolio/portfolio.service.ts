@@ -1,71 +1,112 @@
+// src/portfolio/portfolio.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Portfolio, Project } from '@prisma/client';
+import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 
 @Injectable()
 export class PortfolioService {
-  constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService) {}
 
-  // Mendapatkan semua portfolio dan proyek terkait
-  async getAll(): Promise<{ firstName: string; lastName: string; avatar: string; projectName: string; institutionName: string }[]> {
-    const portfolios = await this.prisma.portfolio.findMany({
-      include: {
-        projects: true,
-      },
-    });
+    async getPortfolioById(id: number) {
+        const portfolio = await this.prisma.portfolio.findUnique({
+            where: { id },
+              include: { projects: true }
+            });
 
-    return portfolios.map((portfolio) => ({
-      firstName: portfolio.firstName,
-      lastName: portfolio.lastName,
-      avatar: portfolio.avatar,
-      projectName: portfolio.projects[0]?.projectName || '',
-      institutionName: portfolio.projects[0]?.institutionName || '',
-    }));
-  }
+        if (!portfolio) {
+            throw new NotFoundException(`Portfolio with ID ${id} not found`);
+        }
 
-  // Mendapatkan portfolio berdasarkan id
-  async getPortfolioById(id: number): Promise<{ firstName: string; lastName: string; avatar: string; projectName: string; institutionName: string }> {
-    const portfolio = await this.prisma.portfolio.findUnique({
-      where: { id },
-      include: {
-        projects: true,
-      },
-    });
+          return {
+              id: portfolio.id,
+                firstName: portfolio.firstName,
+                  lastName: portfolio.lastName,
+                  avatar: portfolio.avatar,
+                projects: portfolio.projects.map(project => ({
+                    id: project.id,
+                      projectName: project.projectName,
+                        institutionName: project.institutionName
+                    })),
+            }
+        }
 
-    if (!portfolio) {
-      throw new NotFoundException(`Portfolio with ID ${id} not found`);
-    }
+    async createPortfolio(data: CreatePortfolioDto) {
+            const user = await this.prisma.portfolio.create({
+                data: {
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    avatar: data.avatar,
+                    username: `${data.firstName.toLowerCase()}-${data.lastName.toLowerCase()}`,
+                    password: 'password',
+                    hobby: null, // atau data.hobby jika ada
+                }
+            })
+             await this.prisma.project.create({
+                data: {
+                    projectName: data.project_name,
+                    institutionName: data.institution_name,
+                    userId: user.id,
+                }
+            })
+             return this.prisma.portfolio.findUnique({
+                where: {
+                   id: user.id
+                },
+                 include: {
+                   projects: true
+                 }
+            })
+        }
 
-    return {
-      firstName: portfolio.firstName,
-      lastName: portfolio.lastName,
-      avatar: portfolio.avatar,
-      projectName: portfolio.projects[0]?.projectName || '',
-      institutionName: portfolio.projects[0]?.institutionName || '',
-    };
-  }
 
-  // Membuat portfolio baru
-  async createPortfolio(data: { username: string; password: string; firstName: string; lastName: string; avatar: string; hobby: string }): Promise<Portfolio> {
-    return this.prisma.portfolio.create({
-      data,
-    });
-  }
+  async updatePortfolio(id: number, data: { firstName?: string; lastName?: string; avatar?: string; project_name?: string; institution_name?:string }) {
 
-  // Membuat project baru
-  async createProject(data: { projectName: string; institutionName: string; userId: number }): Promise<Project> {
-    return this.prisma.project.create({
-      data,
-    });
-  }
+        const portfolio = await this.prisma.portfolio.findUnique({ where: { id }, include: { projects: true } })
 
-  // Update portfolio berdasarkan id
-  async updatePortfolioById(id: number, data: { firstName: string; lastName: string; avatar: string; hobby: string }): Promise<Portfolio> {
-    const portfolio = await this.prisma.portfolio.update({
-      where: { id },
-      data,
-    });
+         if(!portfolio){
+          throw new NotFoundException(`Portfolio with ID ${id} not found`)
+         }
 
-    return portfolio;
+      let updatedPortfolio;
+
+     if(data.firstName || data.lastName || data.avatar){
+        updatedPortfolio = await this.prisma.portfolio.update({
+            where: { id },
+              data: {
+                firstName: data.firstName,
+                  lastName: data.lastName,
+                  avatar: data.avatar
+              },
+          });
+     }
+
+
+     if(data.project_name || data.institution_name){
+        await this.prisma.project.updateMany({
+          where: { userId: id},
+            data: {
+                  projectName: data.project_name,
+                    institutionName: data.institution_name
+              },
+        })
+     }
+
+
+    const updatedPortfolioData = await this.prisma.portfolio.findUnique({
+          where: { id },
+          include: { projects: true },
+       });
+    
+       return {
+         id: updatedPortfolioData.id,
+        firstName: updatedPortfolioData.firstName,
+          lastName: updatedPortfolioData.lastName,
+          avatar: updatedPortfolioData.avatar,
+            projects: updatedPortfolioData.projects.map(project => ({
+              id: project.id,
+                projectName: project.projectName,
+                  institutionName: project.institutionName
+            })),
+      }
   }
 }

@@ -15,33 +15,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PortfolioController = void 0;
 const common_1 = require("@nestjs/common");
 const portfolio_service_1 = require("./portfolio.service");
+const create_portfolio_dto_1 = require("./dto/create-portfolio.dto");
 let PortfolioController = class PortfolioController {
     constructor(portfolioService) {
         this.portfolioService = portfolioService;
     }
-    async getPortfolio() {
-        return this.portfolioService.getAll();
-    }
     async getPortfolioById(id) {
-        return this.portfolioService.getPortfolioById(+id);
+        return this.portfolioService.getPortfolioById(Number(id));
     }
-    async createPortfolio(body) {
-        return this.portfolioService.createPortfolio(body);
+    async createPortfolio(data) {
+        return this.portfolioService.createPortfolio(data);
     }
-    async createProject(body) {
-        return this.portfolioService.createProject(body);
-    }
-    async updatePortfolio(id, body) {
-        return this.portfolioService.updatePortfolioById(+id, body);
+    async updatePortfolio(id, data) {
+        return this.portfolioService.updatePortfolio(Number(id), data);
     }
 };
 exports.PortfolioController = PortfolioController;
-__decorate([
-    (0, common_1.Get)(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], PortfolioController.prototype, "getPortfolio", null);
 __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
@@ -51,18 +40,12 @@ __decorate([
 ], PortfolioController.prototype, "getPortfolioById", null);
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_portfolio_dto_1.CreatePortfolioDto]),
     __metadata("design:returntype", Promise)
 ], PortfolioController.prototype, "createPortfolio", null);
-__decorate([
-    (0, common_1.Post)('project'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], PortfolioController.prototype, "createProject", null);
 __decorate([
     (0, common_1.Post)(':id'),
     __param(0, (0, common_1.Param)('id')),

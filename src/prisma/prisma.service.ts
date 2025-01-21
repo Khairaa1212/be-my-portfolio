@@ -1,43 +1,15 @@
-import { Injectable } from '@nestjs/common';
+// src/prisma/prisma.service.ts
+
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class PrismaService extends PrismaClient {
-  constructor() {
-    super();
-  }
+export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy{
+    async onModuleInit() {
+        await this.$connect();
+    }
 
-  // Metode untuk create
-  async create(data: any) {
-    return await this.portfolio.create({
-      data,
-    });
-  }
-
-  // Metode untuk findAll
-  async findAll() {
-    return await this.portfolio.findMany();
-  }
-
-  // Metode untuk findOne
-  async findOne(id: number) {
-    return await this.portfolio.findUnique({
-      where: { id },
-    });
-  }
-
-  // Metode untuk update
-  async update(id: number, data: any) {
-    return await this.portfolio.update({
-      where: { id },
-      data,
-    });
-  }
-
-  // Metode untuk remove
-  async remove(id: number) {
-    return await this.portfolio.delete({
-      where: { id },
-    });
-  }
+    async onModuleDestroy() {
+        await this.$disconnect();
+    }
 }

@@ -1,43 +1,50 @@
 import { PortfolioService } from './portfolio.service';
+import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 export declare class PortfolioController {
     private readonly portfolioService;
     constructor(portfolioService: PortfolioService);
-    getPortfolio(): Promise<{
-        firstName: string;
-        lastName: string;
-        avatar: string;
-        projectName: string;
-        institutionName: string;
-    }[]>;
     getPortfolioById(id: string): Promise<{
+        id: number;
         firstName: string;
         lastName: string;
         avatar: string;
-        projectName: string;
-        institutionName: string;
+        projects: {
+            id: number;
+            projectName: string;
+            institutionName: string;
+        }[];
     }>;
-    createPortfolio(body: any): Promise<{
+    createPortfolio(data: CreatePortfolioDto): Promise<{
+        projects: {
+            id: number;
+            projectName: string;
+            institutionName: string;
+            userId: number;
+        }[];
+    } & {
+        firstName: string;
+        lastName: string;
+        avatar: string;
         id: number;
         username: string;
         password: string;
+        hobby: string;
+    }>;
+    updatePortfolio(id: string, data: {
+        firstName?: string;
+        lastName?: string;
+        avatar?: string;
+        project_name?: string;
+        institution_name?: string;
+    }): Promise<{
+        id: number;
         firstName: string;
         lastName: string;
         avatar: string;
-        hobby: string;
-    }>;
-    createProject(body: any): Promise<{
-        id: number;
-        projectName: string;
-        institutionName: string;
-        userId: number;
-    }>;
-    updatePortfolio(id: string, body: any): Promise<{
-        id: number;
-        username: string;
-        password: string;
-        firstName: string;
-        lastName: string;
-        avatar: string;
-        hobby: string;
+        projects: {
+            id: number;
+            projectName: string;
+            institutionName: string;
+        }[];
     }>;
 }
