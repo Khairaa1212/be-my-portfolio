@@ -15,45 +15,52 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PortfolioController = void 0;
 const common_1 = require("@nestjs/common");
 const portfolio_service_1 = require("./portfolio.service");
-const create_portfolio_dto_1 = require("./dto/create-portfolio.dto");
 let PortfolioController = class PortfolioController {
     constructor(portfolioService) {
         this.portfolioService = portfolioService;
     }
-    async getPortfolioById(id) {
-        return this.portfolioService.getPortfolioById(Number(id));
+    async getUserWithProjects(id) {
+        try {
+            return await this.portfolioService.getUserWithProjects(id);
+        }
+        catch (error) {
+            if (error instanceof common_1.NotFoundException) {
+                throw new common_1.NotFoundException(error.message);
+            }
+            else {
+                throw new common_1.InternalServerErrorException(error.message);
+            }
+        }
     }
-    async createPortfolio(data) {
-        return this.portfolioService.createPortfolio(data);
-    }
-    async updatePortfolio(id, data) {
-        return this.portfolioService.updatePortfolio(Number(id), data);
+    async deletePortfolio(id) {
+        try {
+            return await this.portfolioService.deletePortfolio(id);
+        }
+        catch (error) {
+            if (error instanceof common_1.NotFoundException) {
+                throw new common_1.NotFoundException(error.message);
+            }
+            else {
+                throw new common_1.InternalServerErrorException(error.message);
+            }
+        }
     }
 };
 exports.PortfolioController = PortfolioController;
 __decorate([
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    __param(0, (0, common_1.Param)('id', new common_1.ParseIntPipe())),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], PortfolioController.prototype, "getPortfolioById", null);
+], PortfolioController.prototype, "getUserWithProjects", null);
 __decorate([
-    (0, common_1.Post)(),
-    (0, common_1.UsePipes)(new common_1.ValidationPipe()),
-    __param(0, (0, common_1.Body)()),
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id', new common_1.ParseIntPipe())),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_portfolio_dto_1.CreatePortfolioDto]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], PortfolioController.prototype, "createPortfolio", null);
-__decorate([
-    (0, common_1.Post)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", Promise)
-], PortfolioController.prototype, "updatePortfolio", null);
+], PortfolioController.prototype, "deletePortfolio", null);
 exports.PortfolioController = PortfolioController = __decorate([
     (0, common_1.Controller)('portfolio'),
     __metadata("design:paramtypes", [portfolio_service_1.PortfolioService])

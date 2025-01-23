@@ -1,8 +1,9 @@
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateProjectDto } from './dto/create-project.dto';
 export declare class ProjectService {
     private prisma;
     constructor(prisma: PrismaService);
-    getProjectById(id: number): Promise<{
+    createProject(createProjectDto: CreateProjectDto): Promise<{
         id: number;
         projectName: string;
         institutionName: string;

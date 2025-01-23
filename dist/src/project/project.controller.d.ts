@@ -1,8 +1,9 @@
 import { ProjectService } from './project.service';
+import { CreateProjectDto } from './dto/create-project.dto';
 export declare class ProjectController {
-    private readonly projectService;
+    private projectService;
     constructor(projectService: ProjectService);
-    getProjectById(id: string): Promise<{
+    createProject(createProjectDto: CreateProjectDto): Promise<{
         id: number;
         projectName: string;
         institutionName: string;

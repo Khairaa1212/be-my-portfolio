@@ -1,16 +1,13 @@
-// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { PortfolioModule } from './portfolio/portfolio.module';
 import { PrismaService } from './prisma/prisma.service';
-import { PortfolioController } from './portfolio/portfolio.controller';
-import { PortfolioService } from './portfolio/portfolio.service';
-import { ProjectController } from './project/project.controller';
-import { ProjectService } from './project/project.service';
+import { ProjectModule } from './project/project.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController, PortfolioController, ProjectController],
-  providers: [AppService, PrismaService, PortfolioService, ProjectService],
+  imports: [PortfolioModule, ProjectModule],
+  controllers: [AppController],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}

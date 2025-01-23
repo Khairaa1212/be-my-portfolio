@@ -1,13 +1,16 @@
-// src/project/project.controller.ts
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
 import { ProjectService } from './project.service';
+import { CreateProjectDto } from './dto/create-project.dto';
 
 @Controller('project')
 export class ProjectController {
-  constructor(private readonly projectService: ProjectService) {}
+    constructor(private projectService: ProjectService) {}
 
-  @Get(':id')
-  async getProjectById(@Param('id') id: string) {
-    return this.projectService.getProjectById(Number(id));
-  }
+    @Post()
+    async createProject(
+      @Body(new ValidationPipe()) createProjectDto: CreateProjectDto,
+    ) {
+        console.log('ProjectController: POST /project called'); 
+        return this.projectService.createProject(createProjectDto);
+    }
 }

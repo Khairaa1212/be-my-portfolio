@@ -1,14 +1,17 @@
-// src/project/project.service.ts
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateProjectDto } from './dto/create-project.dto';
 
 @Injectable()
 export class ProjectService {
     constructor(private prisma: PrismaService) {}
-    
-    async getProjectById(id: number) {
-        return this.prisma.project.findUnique({
-          where: { id },
-        });
-      }
+
+    async createProject(createProjectDto: CreateProjectDto) {
+      console.log('ProjectService: createProject called with:', createProjectDto); // <-- Tambahkan log disini
+      return this.prisma.project.create({
+        data: {
+            ...createProjectDto,
+          },
+      });
+  }
 }

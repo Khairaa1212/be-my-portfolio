@@ -16,9 +16,12 @@ let ProjectService = class ProjectService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async getProjectById(id) {
-        return this.prisma.project.findUnique({
-            where: { id },
+    async createProject(createProjectDto) {
+        console.log('ProjectService: createProject called with:', createProjectDto);
+        return this.prisma.project.create({
+            data: {
+                ...createProjectDto,
+            },
         });
     }
 };
