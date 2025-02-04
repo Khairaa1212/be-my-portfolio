@@ -11,8 +11,10 @@ export class AuthService {
 
   // Fungsi login yang menghasilkan JWT
   async login(username: string, password: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { username },
+    const user = await this.prisma.user.findFirst({
+      where: { 
+        username: username,
+      },
     });
 
     if (user && user.password === password) {
