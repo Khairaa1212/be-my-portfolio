@@ -1,4 +1,4 @@
-import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
+import { Controller, Post, Delete, Param, Body, ValidationPipe, ParseIntPipe, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 
@@ -13,4 +13,19 @@ export class ProjectController {
         console.log('ProjectController: POST /project called'); 
         return this.projectService.createProject(createProjectDto);
     }
+
+    @Delete(':id')
+    async deleteProject(
+      @Param('id', new ParseIntPipe()) id: number,
+    ){
+      try {
+          return await this.projectService.deleteProject(id);
+      } catch (error) {
+          if (error instanceof NotFoundException) {
+              throw new NotFoundException(error.message);
+          } else {
+              throw new InternalServerErrorException(error.message);
+          }
+      }
+    } 
 }

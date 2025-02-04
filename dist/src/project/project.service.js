@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const common_2 = require("@nestjs/common");
 let ProjectService = class ProjectService {
     constructor(prisma) {
         this.prisma = prisma;
@@ -23,6 +24,21 @@ let ProjectService = class ProjectService {
                 ...createProjectDto,
             },
         });
+    }
+    async deleteProject(id) {
+        try {
+            const deletedUser = await this.prisma.project.delete({
+                where: { id },
+            });
+            return deletedUser;
+        }
+        catch (error) {
+            if (error.code === 'P2025') {
+                throw new common_2.NotFoundException(`Project with ID ${id} not found`);
+            }
+            console.error('Error deleting project:', error);
+            throw new Error('Failed to delete project');
+        }
     }
 };
 exports.ProjectService = ProjectService;

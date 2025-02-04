@@ -24,6 +24,19 @@ let ProjectController = class ProjectController {
         console.log('ProjectController: POST /project called');
         return this.projectService.createProject(createProjectDto);
     }
+    async deleteProject(id) {
+        try {
+            return await this.projectService.deleteProject(id);
+        }
+        catch (error) {
+            if (error instanceof common_1.NotFoundException) {
+                throw new common_1.NotFoundException(error.message);
+            }
+            else {
+                throw new common_1.InternalServerErrorException(error.message);
+            }
+        }
+    }
 };
 exports.ProjectController = ProjectController;
 __decorate([
@@ -33,6 +46,13 @@ __decorate([
     __metadata("design:paramtypes", [create_project_dto_1.CreateProjectDto]),
     __metadata("design:returntype", Promise)
 ], ProjectController.prototype, "createProject", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    __param(0, (0, common_1.Param)('id', new common_1.ParseIntPipe())),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], ProjectController.prototype, "deleteProject", null);
 exports.ProjectController = ProjectController = __decorate([
     (0, common_1.Controller)('project'),
     __metadata("design:paramtypes", [project_service_1.ProjectService])
