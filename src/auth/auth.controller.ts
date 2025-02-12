@@ -17,8 +17,28 @@ export class AuthController {
   @UseGuards(JwtAuthGuard) // Guard ini memastikan hanya pengguna dengan token valid yang bisa mengakses
   @Get('user')
   async getMe(@Request() req) {
-    // req.user berisi data pengguna yang telah diverifikasi oleh JwtStrategy
-    const { id, username, password } = req.user;
-    return { id, username, password }; // Mengembalikan id, username, dan password pengguna
+    const { id, username } = req.user;  // Hanya ambil id dan username
+    return { id, username };              // Kembalikan hanya id dan username
+  }
+
+  @Post('register')
+  async register(@Body() body: any) {
+    return this.authService.register(
+      body.username,
+      body.password,
+      body.firstName,
+      body.lastName,
+      body.avatar,
+      body.hobby, // Pastikan argumen 'hobby' ada dan nilainya sesuai
+    );
+  }
+
+  async function () {
+    try {
+        // operasi yang bisa gagal, seperti query Prisma
+    } catch (error) {
+        console.error('Error:', error);
+        throw new Error('Terjadi kesalahan pada server');
+    }
   }
 }

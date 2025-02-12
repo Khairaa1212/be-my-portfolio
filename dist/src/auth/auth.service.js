@@ -13,6 +13,7 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const prisma_service_1 = require("../prisma/prisma.service");
+const bcrypt = require("bcryptjs");
 let AuthService = class AuthService {
     constructor(prisma, jwtService) {
         this.prisma = prisma;
@@ -24,14 +25,40 @@ let AuthService = class AuthService {
                 username: username,
             },
         });
-        if (user && user.password === password) {
+        if (!user) {
+            throw new common_1.UnauthorizedException('Invalid credentials');
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (isPasswordValid) {
+            const { password: hashedPassword, ...result } = user;
             const payload = { id: user.id, username: user.username };
             const token = this.jwtService.sign(payload);
             return { token };
         }
         else {
-            throw new Error('Invalid username or password');
+            throw new common_1.UnauthorizedException('Invalid credentials');
         }
+    }
+    async register(username, password, firstName, lastName, avatar, hobby) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await this.prisma.user.create({
+            data: {
+                username,
+                password: hashedPassword,
+                firstName,
+                lastName,
+                avatar,
+                hobby,
+            },
+        });
+        return {
+            id: user.id,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatar: user.avatar,
+            hobby: user.hobby
+        };
     }
 };
 exports.AuthService = AuthService;

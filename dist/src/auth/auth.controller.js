@@ -25,8 +25,19 @@ let AuthController = class AuthController {
         return this.authService.login(body.username, body.password);
     }
     async getMe(req) {
-        const { id, username, password } = req.user;
-        return { id, username, password };
+        const { id, username } = req.user;
+        return { id, username };
+    }
+    async register(body) {
+        return this.authService.register(body.username, body.password, body.firstName, body.lastName, body.avatar, body.hobby);
+    }
+    async function() {
+        try {
+        }
+        catch (error) {
+            console.error('Error:', error);
+            throw new Error('Terjadi kesalahan pada server');
+        }
     }
 };
 exports.AuthController = AuthController;
@@ -45,6 +56,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "getMe", null);
+__decorate([
+    (0, common_1.Post)('register'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "register", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])

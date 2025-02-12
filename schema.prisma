@@ -16,6 +16,7 @@ model User {
   avatar    String?
   hobby     String?
   projects  Project[]
+  blogs    Blog[]
 }
 
 model Project {
@@ -24,4 +25,12 @@ model Project {
   institutionName String
   userId          Int
   user            User @relation(fields: [userId], references: [id])
+}
+
+model Blog {
+  id       Int      @id @default(autoincrement())
+  title    String
+  body     String
+  authorId Int      // Relasi dengan tabel User (user_id)
+  author   User     @relation(fields: [authorId], references: [id])  // Relasi satu-ke-banyak dengan User
 }

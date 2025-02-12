@@ -7,7 +7,7 @@ async function main() {
         data: [
             {
                 username: "Khairra",
-                password: "password",
+                password: "password123",
                 firstName: "Asmarani",
                 lastName: "Khaira",
                 avatar: "",
@@ -15,7 +15,7 @@ async function main() {
             },
             {
                 username: "Kai",
-                password: "myprojetum",
+                password: "myprojectum",
                 firstName: "Khaira",
                 lastName: "Agustina",
                 avatar: "",
@@ -23,7 +23,7 @@ async function main() {
             },
             {
                 username: "Tya",
-                password: "my password",
+                password: "mypassword",
                 firstName: "Rastya",
                 lastName: "Dachniarti",
                 avatar: "",
