@@ -7,6 +7,7 @@ export declare class BlogController {
     create(createBlogDto: CreateBlogDto): Promise<{
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     }>;
@@ -23,10 +24,11 @@ export declare class BlogController {
     } & {
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     })[]>;
-    findOne(id: string): Promise<{
+    findOne(slug: string): Promise<{
         author: {
             id: number;
             username: string;
@@ -39,18 +41,21 @@ export declare class BlogController {
     } & {
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     }>;
     update(id: string, updateBlogDto: UpdateBlogDto): Promise<{
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     }>;
     remove(id: string): Promise<{
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     }>;

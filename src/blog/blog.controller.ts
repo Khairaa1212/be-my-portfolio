@@ -18,9 +18,9 @@ export class BlogController {
     return this.blogService.findAll();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.blogService.findOne(+id);
+  @Get(':slug') // Gunakan slug sebagai parameter
+  async findOne(@Param('slug') slug: string) {
+     return this.blogService.findOneBySlug(slug); // Panggil method findOneBySlug di service
   }
 
   @Put(':id')

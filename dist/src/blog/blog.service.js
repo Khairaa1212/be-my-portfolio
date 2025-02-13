@@ -20,6 +20,7 @@ let BlogService = class BlogService {
         return this.prisma.blog.create({
             data: {
                 title: createBlogDto.title,
+                slug: createBlogDto.slug,
                 body: createBlogDto.body,
                 authorId: createBlogDto.authorId,
             },
@@ -30,9 +31,9 @@ let BlogService = class BlogService {
             include: { author: true },
         });
     }
-    async findOne(id) {
+    async findOneBySlug(slug) {
         return this.prisma.blog.findUnique({
-            where: { id },
+            where: { slug },
             include: { author: true },
         });
     }

@@ -30,7 +30,8 @@ model Project {
 model Blog {
   id       Int      @id @default(autoincrement())
   title    String
-  body     String
+  slug     String   @unique @default("default-slug")
+  body     String    @db.Text
   authorId Int      // Relasi dengan tabel User (user_id)
-  author   User     @relation(fields: [authorId], references: [id])  // Relasi satu-ke-banyak dengan User
+  author   User     @relation(fields: [authorId], references: [id])  // mengatur relasi antara model Blog dan model User
 }

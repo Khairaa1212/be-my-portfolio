@@ -27,8 +27,8 @@ let BlogController = class BlogController {
     async findAll() {
         return this.blogService.findAll();
     }
-    async findOne(id) {
-        return this.blogService.findOne(+id);
+    async findOne(slug) {
+        return this.blogService.findOneBySlug(slug);
     }
     async update(id, updateBlogDto) {
         return this.blogService.update(+id, updateBlogDto);
@@ -52,8 +52,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BlogController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)(':slug'),
+    __param(0, (0, common_1.Param)('slug')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)

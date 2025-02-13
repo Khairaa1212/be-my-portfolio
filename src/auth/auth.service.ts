@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common'; // Import UnauthorizedException
+import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common'; // Import UnauthorizedException
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
@@ -41,6 +41,17 @@ export class AuthService {
     avatar: string,
     hobby: string,
   ): Promise<any> {
+    // Periksa apakah username sudah ada di database
+    const existingUser = await this.prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('Username already exists'); // Jika username sudah ada, lemparkan error 409
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await this.prisma.user.create({
@@ -60,7 +71,7 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       avatar: user.avatar,
-      hobby: user.hobby
+      hobby: user.hobby,
     };
   }
 }

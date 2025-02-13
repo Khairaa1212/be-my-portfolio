@@ -8,33 +8,34 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 export class BlogService {
   constructor(private prisma: PrismaService) {}
 
-  // Create Blog
+  // Create Blog Post
   async create(createBlogDto: CreateBlogDto) {
     return this.prisma.blog.create({
       data: {
         title: createBlogDto.title,
+        slug: createBlogDto.slug,
         body: createBlogDto.body,
         authorId: createBlogDto.authorId, // user_id sebagai foreign key
       },
     });
   }
 
-  // Find All Blogs
+  // Find All Blogs Get
   async findAll() {
     return this.prisma.blog.findMany({
       include: { author: true }, // Menyertakan informasi user yang menulis blog
     });
   }
 
-  // Find One Blog
-  async findOne(id: number) {
+  // Find One Blog Get by slug (ubah findOne untuk menggunakan slug)
+  async findOneBySlug(slug: string) {
     return this.prisma.blog.findUnique({
-      where: { id },
+      where: { slug },
       include: { author: true }, // Menyertakan informasi user yang menulis blog
     });
   }
 
-  // Update Blog
+  // Update Blog by id
   async update(id: number, updateBlogDto: UpdateBlogDto) {
     return this.prisma.blog.update({
       where: { id },
@@ -42,7 +43,7 @@ export class BlogService {
     });
   }
 
-  // Delete Blog
+  // Delete Blog by id
   async remove(id: number) {
     return this.prisma.blog.delete({
       where: { id },

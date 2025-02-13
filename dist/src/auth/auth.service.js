@@ -40,6 +40,14 @@ let AuthService = class AuthService {
         }
     }
     async register(username, password, firstName, lastName, avatar, hobby) {
+        const existingUser = await this.prisma.user.findUnique({
+            where: {
+                username,
+            },
+        });
+        if (existingUser) {
+            throw new common_1.ConflictException('Username already exists');
+        }
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await this.prisma.user.create({
             data: {
@@ -57,7 +65,7 @@ let AuthService = class AuthService {
             firstName: user.firstName,
             lastName: user.lastName,
             avatar: user.avatar,
-            hobby: user.hobby
+            hobby: user.hobby,
         };
     }
 };

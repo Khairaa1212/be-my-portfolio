@@ -7,6 +7,7 @@ export declare class BlogService {
     create(createBlogDto: CreateBlogDto): Promise<{
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     }>;
@@ -23,10 +24,11 @@ export declare class BlogService {
     } & {
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     })[]>;
-    findOne(id: number): Promise<{
+    findOneBySlug(slug: string): Promise<{
         author: {
             id: number;
             username: string;
@@ -39,18 +41,21 @@ export declare class BlogService {
     } & {
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     }>;
     update(id: number, updateBlogDto: UpdateBlogDto): Promise<{
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     }>;
     remove(id: number): Promise<{
         id: number;
         title: string;
+        slug: string;
         body: string;
         authorId: number;
     }>;
